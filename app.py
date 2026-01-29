@@ -80,13 +80,13 @@ if foto1 and foto2:
                 
                 # --- CAMBIO EN LA PARTE FINAL DEL CÓDIGO ---
 
-# --- CAMBIO EN LA PARTE FINAL DEL CÓDIGO ---
-
-# Sustituye la línea antigua por esta:
-response = client.models.generate_content(
-    model="gemini-3-flash-preview",  # <--- Este es el modelo que tienes activo
-    contents=[prompt, img1, img2]
-)
+                # --- CAMBIO EN LA PARTE FINAL DEL CÓDIGO ---
+                
+                # Sustituye la línea antigua por esta:
+                response = client.models.generate_content(
+                    model="gemini-3-flash-preview",  # <--- Este es el modelo que tienes activo
+                    contents=[prompt, img1, img2]
+                )
                 
                 st.success("✅ Análisis Finalizado")
                 st.markdown("### 📋 Informe de Tasación Profesional")
