@@ -116,14 +116,12 @@ if foto1 and foto2:
                 3. VALOR ESTIMADO: Rango de precio en el mercado actual (Europa).
                 Responde de forma profesional, estructurada y en español.
                 """
-                
-                # --- CAMBIO EN LA PARTE FINAL DEL CÓDIGO ---
 
                 # --- CAMBIO EN LA PARTE FINAL DEL CÓDIGO ---
                 
-                # Sustituye la línea antigua por esta:
+                # Usamos el ID exacto de tu tabla de modelos estables
                 response = client.models.generate_content(
-                    model="gemini-3-flash-preview",  # <--- Este es el modelo que tienes activo
+                    model="gemini-2.5-flash", 
                     contents=[prompt, img1, img2]
                 )
                 
