@@ -3,36 +3,42 @@ from google import genai
 from google.oauth2 import service_account
 from PIL import Image
 import io
-
+import google.generativeai as genai_v2 # Usamos el motor directo
 # 1. CONFIGURACIÓN DE PÁGINA
 st.set_page_config(page_title="Infalible Vertex", page_icon="🏢", layout="centered")
 st.title("🏢 Peritaje Profesional Vertex")
 
 # 2. CONEXIÓN EMPRESARIAL (VERSIÓN BLINDADA)
-try:
-    # Verificamos si existen los secretos
-    if "gcp_service_account" not in st.secrets:
-        st.error("❌ No se encontraron las credenciales en Streamlit Secrets.")
-        st.stop()
 
-    # Convertimos los secretos a un diccionario real
+# 2. CONEXIÓN EMPRESARIAL DIRECTA
+try:
     creds_info = dict(st.secrets["gcp_service_account"])
     
-    # --- LIMPIEZA DE SEGURIDAD DE LA LLAVE ---
-    # Esto soluciona problemas de formato, comillas y saltos de línea
-    raw_key = str(creds_info.get("private_key", ""))
-    clean_key = raw_key.strip().strip('"').strip("'").replace("\\n", "\n")
-    creds_info["private_key"] = clean_key
+    # Limpieza de llave
+    p_key = creds_info["private_key"].strip().replace("\\n", "\n")
     
-    # --- DEFINICIÓN DE SCOPES (CLAVE PARA EVITAR INVALID_SCOPE) ---
-    # Le otorgamos permiso explícito para usar la plataforma de Google Cloud (Vertex)
-    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+    # Autenticación directa por API Key o credenciales simplificadas
+    # Para Vertex AI Studio a veces es más fácil usar la API KEY si la tienes, 
+    # pero sigamos con tu service account:
     
-    # Creamos el objeto de credenciales oficial
-    google_creds = service_account.Credentials.from_service_account_info(
+    certificaciones = service_account.Credentials.from_service_account_info(
         creds_info, 
-        scopes=scopes
+        scopes=["https://www.googleapis.com/auth/cloud-platform"]
     )
+    
+    # Cambiamos a la inicialización estándar que no requiere mTLS (el certificado que te pide)
+    client = genai.Client(
+        vertexai=True,
+        project=creds_info["project_id"],
+        location="us-central1",
+        credentials=certificaciones
+    )
+    
+    st.sidebar.success(f"✅ Sistema Activo")
+    
+except Exception as e:
+    st.error(f"Error de conexión: {e}")
+    st.stop()
     
     # Inicializamos el cliente de IA apuntando a Vertex
     client = genai.Client(
