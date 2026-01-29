@@ -1,3 +1,4 @@
+
 import streamlit as st
 # Usamos la librería oficial 'google-genai' que ya tienes en requirements
 from google import genai 
