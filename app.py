@@ -1,4 +1,9 @@
 
+# =========================================================
+# ESTADO: v1.0 - HITO EUREKA (29/01/2026)
+# FUNCIONALIDAD: Conexión exitosa con Vertex AI.
+# MODELO: Gemini 2.5 Flash.
+# =========================================================
 import streamlit as st
 # Usamos la librería oficial 'google-genai' que ya tienes en requirements
 from google import genai 
@@ -40,6 +45,7 @@ try:
     )
     
     st.sidebar.success(f"✅ Conectado: {creds_info.get('project_id')}")
+    st.sidebar.info("🚀 Versión 1.0: Hito Eureka - Conexión IA OK")
 
 except Exception as e:
     st.error(f"❌ Error de inicio: {e}")
