@@ -78,9 +78,11 @@ if foto1 and foto2:
                 Responde de forma profesional, estructurada y en español.
                 """
                 
-                # Llamada al modelo Gemini 1.5 Flash en Vertex AI
+                # --- CAMBIO EN LA PARTE FINAL DEL CÓDIGO ---
+
+                # Sustituye la línea antigua por esta:
                 response = client.models.generate_content(
-                    model="gemini-1.5-flash",
+                    model="gemini-3-flash-preview",  # <--- Este es el modelo que tienes activo
                     contents=[prompt, img1, img2]
                 )
                 
