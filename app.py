@@ -1,15 +1,48 @@
 import streamlit as st
-from google import genai
+# Usamos la librería oficial 'google-genai' que ya tienes en requirements
+from google import genai 
 from google.oauth2 import service_account
 from PIL import Image
 import io
-import google.generativeai as genai_v2 # Usamos el motor directo
+
 # 1. CONFIGURACIÓN DE PÁGINA
 st.set_page_config(page_title="Infalible Vertex", page_icon="🏢", layout="centered")
 st.title("🏢 Peritaje Profesional Vertex")
 
-# 2. CONEXIÓN EMPRESARIAL (VERSIÓN BLINDADA)
+# 2. CONEXIÓN EMPRESARIAL (VERSIÓN LIMPIA)
+try:
+    if "gcp_service_account" not in st.secrets:
+        st.error("❌ Faltan credenciales en Secrets")
+        st.stop()
 
+    creds_info = dict(st.secrets["gcp_service_account"])
+    
+    # Limpieza de llave (importante para evitar errores de formato)
+    raw_key = str(creds_info.get("private_key", ""))
+    clean_key = raw_key.strip().strip('"').strip("'").replace("\\n", "\n")
+    creds_info["private_key"] = clean_key
+    
+    # Scope para Vertex AI
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+    
+    google_creds = service_account.Credentials.from_service_account_info(
+        creds_info, 
+        scopes=scopes
+    )
+    
+    # Inicialización del cliente (Gemini 3 Ready)
+    client = genai.Client(
+        vertexai=True,
+        project=creds_info.get("project_id"),
+        location="us-central1",
+        credentials=google_creds
+    )
+    
+    st.sidebar.success(f"✅ Conectado: {creds_info.get('project_id')}")
+
+except Exception as e:
+    st.error(f"❌ Error de inicio: {e}")
+    st.stop()
 # 2. CONEXIÓN EMPRESARIAL DIRECTA
 try:
     creds_info = dict(st.secrets["gcp_service_account"])
